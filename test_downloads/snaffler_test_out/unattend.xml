@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<unattend>
+  <settings pass="specialize">
+    <component>
+      <AutoLogon>
+        <Password>P@ssw0rd123</Password>
+        <Username>Administrator</Username>
+      </AutoLogon>
+    </component>
+  </settings>
+</unattend>

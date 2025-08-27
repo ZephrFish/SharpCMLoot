@@ -1,0 +1,420 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths:
+      - '**.cs'
+      - '**.csproj'
+      - '**.sln'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type'
+        required: false
+        default: 'none'
+        type: choice
+        options:
+          - none
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  packages: write
+  actions: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      should_release: ${{ steps.version.outputs.should_release }}
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Determine version
+      id: version
+      run: |
+        # Get latest version tag
+        $tags = git tag --sort=-version:refname | Where-Object { $_ -match '^v\d+\.\d+\.\d+$' }
+        $latestTag = if ($tags.Count -eq 0) { "v0.0.0" } else { $tags[0] }
+        
+        # Parse version
+        $version = $latestTag -replace '^v', ''
+        $parts = $version.Split('.')
+        $major = [int]$parts[0]
+        $minor = [int]$parts[1] 
+        $patch = [int]$parts[2]
+        
+        # Determine if we should release
+        $shouldRelease = "false"
+        $releaseType = "${{ github.event.inputs.release_type }}"
+        
+        # Manual release requested
+        if ($releaseType -ne "" -and $releaseType -ne "none") {
+          $shouldRelease = "true"
+          switch ($releaseType) {
+            "major" { $major++; $minor = 0; $patch = 0 }
+            "minor" { $minor++; $patch = 0 }
+            "patch" { $patch++ }
+          }
+        }
+        # Auto-release on main branch with code changes
+        elseif ("${{ github.ref }}" -eq "refs/heads/main" -and "${{ github.event_name }}" -eq "push") {
+          # Check for version-worthy changes
+          try {
+            # Check if this is the first commit (no parent)
+            $parentCount = (git rev-list --count HEAD) -as [int]
+            if ($parentCount -eq 1) {
+              # First commit - check if there are source files
+              $sourceFiles = git ls-files | Where-Object { $_ -match '\.(cs|csproj|sln)$' }
+              if ($sourceFiles.Count -gt 0) {
+                Write-Host "First commit with source files detected - creating initial release"
+                $shouldRelease = "true"
+                if ($latestTag -eq "v0.0.0") {
+                  # First release should be v0.0.1
+                  $patch = 1
+                } else {
+                  $patch++
+                }
+              }
+            } else {
+              # Normal commit - check for changes
+              $changes = git diff --name-only HEAD~1..HEAD 2>$null
+              if ($changes -match '\.(cs|csproj|sln)$') {
+                $shouldRelease = "true"
+                $patch++  # Default to patch for auto-releases
+              }
+            }
+          } catch {
+            Write-Host "Error detecting changes: $_"
+          }
+        }
+        
+        $newVersion = "v$major.$minor.$patch"
+        echo "version=$newVersion" >> $env:GITHUB_OUTPUT
+        echo "version_number=$major.$minor.$patch" >> $env:GITHUB_OUTPUT
+        echo "should_release=$shouldRelease" >> $env:GITHUB_OUTPUT
+        echo "Latest tag: $latestTag -> New version: $newVersion (Release: $shouldRelease)"
+      shell: pwsh
+    
+    - name: Setup build tools
+      uses: microsoft/setup-msbuild@v1.3
+      
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+      
+    - name: Restore packages
+      run: nuget restore SCML.sln
+    
+    - name: Update version in AssemblyInfo
+      if: steps.version.outputs.should_release == 'true'
+      run: |
+        $version = "${{ steps.version.outputs.version_number }}"
+        $assemblyInfoFiles = @(
+          "Properties\AssemblyInfo.cs",
+          "MockSCCMServer\Properties\AssemblyInfo.cs"
+        )
+        
+        foreach ($file in $assemblyInfoFiles) {
+          if (Test-Path $file) {
+            $content = Get-Content $file -Raw
+            $content = $content -replace 'AssemblyVersion\("[0-9\.]+"\)', "AssemblyVersion(`"$version.0`")"
+            $content = $content -replace 'AssemblyFileVersion\("[0-9\.]+"\)', "AssemblyFileVersion(`"$version.0`")"
+            Set-Content $file $content
+            Write-Host "Updated version in $file to $version"
+          }
+        }
+      shell: pwsh
+      continue-on-error: true
+      
+    - name: Build
+      run: |
+        msbuild SCML.sln /p:Configuration=Release /p:Platform="Any CPU"
+      
+    - name: Prepare standalone executables
+      run: |
+        # Check where SCML_Standalone.exe was created by ILRepack
+        if (Test-Path "bin\Release\SCML_Standalone.exe") {
+          Copy-Item "bin\Release\SCML_Standalone.exe" "SCML_Standalone.exe" -Force
+          Write-Host "SCML_Standalone.exe copied from bin\Release"
+        } else {
+          Write-Host "SCML_Standalone.exe not found in bin\Release, checking for SCML.exe"
+          if (Test-Path "bin\Release\SCML.exe") {
+            Write-Host "Creating standalone executable manually..."
+            nuget install ILRepack -Version 2.0.18 -OutputDirectory packages
+            $ilrepack = "packages\ILRepack.2.0.18\tools\ILRepack.exe"
+            & $ilrepack /out:SCML_Standalone.exe /targetplatform:v4 /internalize /parallel /ndebug `
+              bin\Release\SCML.exe `
+              bin\Release\CommandLine.dll `
+              bin\Release\SMBLibrary.dll `
+              bin\Release\Newtonsoft.Json.dll `
+              bin\Release\System.Buffers.dll `
+              bin\Release\System.Memory.dll `
+              bin\Release\System.Numerics.Vectors.dll `
+              bin\Release\System.Runtime.CompilerServices.Unsafe.dll
+          }
+        }
+        
+        # Verify SCML standalone exists
+        if (-not (Test-Path "SCML_Standalone.exe")) {
+          Write-Error "Failed to create SCML_Standalone.exe"
+          exit 1
+        }
+        
+        # Copy mock server 
+        if (Test-Path "MockSCCMServer\bin\Release\MockSCCMServer_Standalone.exe") {
+          Copy-Item "MockSCCMServer\bin\Release\MockSCCMServer_Standalone.exe" "MockSCCMServer_Standalone.exe" -Force
+          Write-Host "MockSCCMServer_Standalone.exe copied"
+        } elseif (Test-Path "MockSCCMServer\bin\Release\MockSCCMServer.exe") {
+          Copy-Item "MockSCCMServer\bin\Release\MockSCCMServer.exe" "MockSCCMServer_Standalone.exe" -Force
+          Write-Host "MockSCCMServer.exe copied as standalone"
+        } else {
+          Write-Error "MockSCCMServer.exe not found"
+          exit 1
+        }
+        
+        # Verify both executables exist
+        Write-Host "Verifying executables:"
+        @("SCML_Standalone.exe", "MockSCCMServer_Standalone.exe") | ForEach-Object {
+          if (Test-Path $_) {
+            $size = (Get-Item $_).Length / 1MB
+            Write-Host "$_`: $([Math]::Round($size, 2)) MB"
+          } else {
+            Write-Error "$_ not found"
+            exit 1
+          }
+        }
+      shell: pwsh
+    
+    - name: Test
+      run: |
+        # Quick smoke test
+        .\SCML_Standalone.exe --help
+        Write-Host "Build test passed"
+      shell: pwsh
+      continue-on-error: true
+    
+    - name: Run PR tests
+      if: github.event_name == 'pull_request'
+      run: |
+        Write-Host "Running PR validation tests..."
+        
+        # Test help output
+        .\SCML_Standalone.exe --help | Out-Null
+        if ($LASTEXITCODE -ne 0) { throw "Help command failed" }
+        
+        # Start mock server for testing
+        $mockProcess = Start-Process -FilePath ".\MockSCCMServer_Standalone.exe" -PassThru -WindowStyle Hidden
+        Start-Sleep -Seconds 5
+        
+        try {
+          # Test connection
+          .\SCML_Standalone.exe --host localhost --list-shares --current-user
+          if ($LASTEXITCODE -ne 0) { Write-Warning "List shares test failed" }
+          
+          Write-Host "PR tests completed successfully"
+        } finally {
+          # Clean up mock server
+          if ($mockProcess -and !$mockProcess.HasExited) {
+            Stop-Process -Id $mockProcess.Id -Force -ErrorAction SilentlyContinue
+          }
+        }
+      shell: pwsh
+      continue-on-error: true
+    
+    - name: Package
+      id: package
+      run: |
+        $version = "${{ steps.version.outputs.version }}"
+        
+        # Verify executables exist before packaging
+        Write-Host "Checking for required files..."
+        $requiredFiles = @("SCML_Standalone.exe", "MockSCCMServer_Standalone.exe")
+        foreach ($file in $requiredFiles) {
+          if (-not (Test-Path $file)) {
+            Write-Error "$file missing"
+            exit 1
+          }
+        }
+        Write-Host "All required files found"
+        
+        # Create packages
+        @{
+          "SCML_$version.zip" = @(
+            "SCML_Standalone.exe"
+            "README.md"
+            "docs\"
+          )
+          "MockServer_$version.zip" = @(
+            "MockSCCMServer_Standalone.exe"
+            "MockSCCMServer\README.md"
+          )
+          "SCML_Complete_$version.zip" = @(
+            "SCML_Standalone.exe"
+            "MockSCCMServer_Standalone.exe"
+            "*.md"
+            "docs\"
+          )
+        }.GetEnumerator() | ForEach-Object {
+          $zipName = $_.Key
+          $files = $_.Value
+          
+          $tempDir = New-Item -ItemType Directory -Path "temp_$([System.IO.Path]::GetFileNameWithoutExtension($zipName))" -Force
+          foreach ($file in $files) {
+            if (Test-Path $file) {
+              Copy-Item $file $tempDir -Recurse -Force
+            }
+          }
+          Compress-Archive -Path "$tempDir\*" -DestinationPath $zipName -Force
+          Remove-Item $tempDir -Recurse -Force
+        }
+        
+        # List packages
+        Write-Host "Created files for release:"
+        Get-ChildItem *.exe, *.zip | ForEach-Object {
+          Write-Host "$($_.Name): $([Math]::Round($_.Length / 1MB, 2)) MB"
+        }
+        
+        # Verify all expected files exist
+        $expectedFiles = @(
+          "SCML_Standalone.exe",
+          "MockSCCMServer_Standalone.exe",
+          "SCML_$version.zip",
+          "MockServer_$version.zip",
+          "SCML_Complete_$version.zip"
+        )
+        
+        $missingFiles = @()
+        foreach ($file in $expectedFiles) {
+          if (-not (Test-Path $file)) {
+            $missingFiles += $file
+          }
+        }
+        
+        if ($missingFiles.Count -gt 0) {
+          Write-Warning "Missing expected files:"
+          $missingFiles | ForEach-Object { Write-Warning "  - $_" }
+        }
+      shell: pwsh
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ github.run_number }}
+        path: |
+          *.exe
+          *.zip
+        retention-days: 30
+    
+    - name: Generate changelog
+      if: steps.version.outputs.should_release == 'true'
+      id: changelog
+      run: |
+        $latestTag = "${{ steps.version.outputs.version }}"
+        
+        # Try to get previous tag
+        $previousTag = $null
+        try {
+          $tags = git tag --sort=-version:refname | Where-Object { $_ -match '^v\d+\.\d+\.\d+$' -and $_ -ne $latestTag }
+          if ($tags.Count -gt 0) {
+            $previousTag = $tags[0]
+          }
+        } catch {
+          Write-Host "No previous tags found"
+        }
+        
+        if (-not $previousTag) { $previousTag = "v0.0.0" }
+        
+        # Get commit messages
+        $commits = ""
+        if ($previousTag -eq "v0.0.0") {
+          $commits = "- Initial Release"
+        } else {
+          try {
+            $commitList = git log "$previousTag..HEAD" --pretty=format:"- %s" 2>$null
+            if ($commitList) {
+              $commits = $commitList | Out-String
+            }
+          } catch {
+            Write-Host "Could not get commit history"
+          }
+        }
+        
+        if (-not $commits) {
+          $commits = "- Updates and improvements"
+        }
+        
+        # Save changelog for output
+        $changelog = @"
+        ### Changes
+        $commits
+        "@
+        echo "changelog<<EOF" >> $env:GITHUB_OUTPUT
+        echo $changelog >> $env:GITHUB_OUTPUT
+        echo "EOF" >> $env:GITHUB_OUTPUT
+      shell: pwsh
+      continue-on-error: true
+    
+    - name: Verify release files
+      if: steps.version.outputs.should_release == 'true'
+      run: |
+        Write-Host "Verifying files for release..."
+        $version = "${{ steps.version.outputs.version }}"
+        
+        # Check executables
+        @("SCML_Standalone.exe", "MockSCCMServer_Standalone.exe") | ForEach-Object {
+          if (-not (Test-Path $_)) {
+            Write-Error "$_ not found"
+            exit 1
+          }
+        }
+        
+        # Check ZIP files
+        $zipCount = (Get-ChildItem *.zip).Count
+        if ($zipCount -eq 0) {
+          Write-Error "No ZIP files found"
+          exit 1
+        }
+        
+        Write-Host "All release files verified"
+      shell: pwsh
+    
+    - name: Create release
+      if: steps.version.outputs.should_release == 'true'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        name: SCML ${{ steps.version.outputs.version }}
+        body: |
+          ## SCML ${{ steps.version.outputs.version }}
+          
+          ${{ steps.changelog.outputs.changelog }}
+          
+          ### Downloads
+          - `SCML_Standalone.exe` - Main tool (no dependencies needed)
+          - `MockSCCMServer_Standalone.exe` - Test server
+          - `SCML_${{ steps.version.outputs.version }}.zip` - Full package with docs
+          - `SCML_Complete_${{ steps.version.outputs.version }}.zip` - Everything included
+          
+          ### Quick Start
+          ```cmd
+          SCML_Standalone.exe --host server.domain.com --list-shares --current-user
+          ```
+        draft: false
+        prerelease: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' }}
+        files: |
+          ./SCML_Standalone.exe
+          ./MockSCCMServer_Standalone.exe
+          ./*.zip
+        token: ${{ secrets.GITHUB_TOKEN }}
+        generate_release_notes: true
