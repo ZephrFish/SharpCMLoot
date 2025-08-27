@@ -1,0 +1,76 @@
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio cache/options
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+# NuGet Packages
+packages/
+*.nupkg
+*.snupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
+
+# Build artifacts
+*.dll
+*.pdb
+*.cache
+*.txt.lock
+*.json.lock
+*.ide
+*.ide-shm
+*.ide-wal
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+*~
+*.swp
+.DS_Store
+Thumbs.db
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+
+# Output files from the tool
+CMLootOut/
+discovered_sccm_servers.txt
+inventory.txt
+out
+out.txt
+*.html
+
+# Keep the standalone executables for easy deployment
+!SCML_Standalone.exe
+!MockSCCMServer_Standalone.exe
+!bin/Release/SCML_Standalone.exe
+!MockSCCMServer/bin/Release/MockSCCMServer_Standalone.exe
+
+# Keep the source files
+!CommandLineOptions.cs
+!Program.cs
+!*.csproj
+!*.sln
+!packages.config
