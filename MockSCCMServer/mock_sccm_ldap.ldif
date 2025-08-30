@@ -1,0 +1,57 @@
+# Mock SCCM LDAP Data
+# Domain: CORP.LOCAL
+# Generated: 2025-08-27 00:31:38
+
+# Domain entry
+dn: dc=corp,dc=local
+objectClass: domain
+objectClass: domainDNS
+dc: corp
+
+# System Management container (where SCCM objects are stored)
+dn: cn=System Management,cn=System,dc=corp,dc=local
+objectClass: container
+cn: System Management
+
+# SCCM Site System entries
+
+dn: cn=SCCM-PRIMARY.corp.local,cn=System Management,cn=System,dc=corp,dc=local
+objectClass: mSSMSManagementPoint
+objectClass: mSSMSSiteSystemServer
+cn: SCCM-PRIMARY.corp.local
+mSSMSMPName: SCCM-PRIMARY.corp.local
+mSSMSSiteCode: PR1
+mSSMSServerType: Primary
+dNSHostName: SCCM-PRIMARY.corp.local
+description: Mock SCCM Primary Server
+
+
+dn: cn=SCCM-SECONDARY.corp.local,cn=System Management,cn=System,dc=corp,dc=local
+objectClass: mSSMSManagementPoint
+objectClass: mSSMSSiteSystemServer
+cn: SCCM-SECONDARY.corp.local
+mSSMSMPName: SCCM-SECONDARY.corp.local
+mSSMSSiteCode: SC1
+mSSMSServerType: Secondary
+dNSHostName: SCCM-SECONDARY.corp.local
+description: Mock SCCM Secondary Server
+
+
+dn: cn=SCCM-DP01.corp.local,cn=System Management,cn=System,dc=corp,dc=local
+objectClass: mSSMSManagementPoint
+objectClass: mSSMSSiteSystemServer
+cn: SCCM-DP01.corp.local
+mSSMSMPName: SCCM-DP01.corp.local
+mSSMSSiteCode: DP1
+mSSMSServerType: Distribution Point
+dNSHostName: SCCM-DP01.corp.local
+description: Mock SCCM Distribution Point Server
+
+
+# Instructions for testing:
+# 1. Import this LDIF into your test LDAP server
+# 2. Configure SCML to query your test LDAP server
+# 3. Add entries to your hosts file:
+#    127.0.0.1 SCCM-PRIMARY.corp.local
+#    127.0.0.1 SCCM-SECONDARY.corp.local
+#    127.0.0.1 SCCM-DP01.corp.local

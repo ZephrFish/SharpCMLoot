@@ -1,0 +1,2740 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SMBLibrary</name>
+    </assembly>
+    <members>
+        <member name="F:SMBLibrary.Authentication.GSSAPI.GSSAttributeName.IsGuest">
+            <summary>
+            Permit access to this user via the guest user account if the normal authentication process fails.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.GSSProvider.GetNTLMChallengeMessage(SMBLibrary.Authentication.GSSAPI.GSSContext@,SMBLibrary.Authentication.NTLM.NegotiateMessage,SMBLibrary.Authentication.NTLM.ChallengeMessage@)">
+            <summary>
+            Helper method for legacy implementation.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.GSSProvider.NTLMAuthenticate(SMBLibrary.Authentication.GSSAPI.GSSContext,SMBLibrary.Authentication.NTLM.AuthenticateMessage)">
+            <summary>
+            Helper method for legacy implementation.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.IGSSMechanism.AcceptSecurityContext(System.Object@,System.Byte[],System.Byte[]@)">
+            <summary>
+            Equivalent to GSS_Accept_sec_context
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.IGSSMechanism.DeleteSecurityContext(System.Object@)">
+            <summary>
+            Equivalent to GSS_Delete_sec_context
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.IGSSMechanism.GetContextAttribute(System.Object,SMBLibrary.Authentication.GSSAPI.GSSAttributeName)">
+            <summary>
+            Equivalent to GSS_Inquire_context
+            Obtains information about a given security context (even an incomplete one)
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationToken.GetBytes(System.Boolean)">
+            <param name="includeHeader">Prepend the generic GSSAPI header. Required for negTokenInit, optional for negTokenResp.</param>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationToken.ReadToken(System.Byte[],System.Int32,System.Boolean)">
+            <summary>
+            https://tools.ietf.org/html/rfc2743
+            </summary>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="T:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationTokenInit">
+            <summary>
+            RFC 4178 - negTokenInit
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationTokenInit.MechanismTypeList">
+            <summary>
+            Contains one or more security mechanisms available for the initiator, in decreasing preference order.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationTokenInit.#ctor(System.Byte[],System.Int32)">
+            <param name="offset">The offset following the NegTokenInit tag</param>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="T:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationTokenInit2">
+            <summary>
+            [MS-SPNG] - NegTokenInit2
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationTokenInit2.#ctor(System.Byte[],System.Int32)">
+            <param name="offset">The offset following the NegTokenInit2 tag</param>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="T:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationTokenResponse">
+            <summary>
+            RFC 4178 - negTokenResp
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.GSSAPI.SimpleProtectedNegotiationTokenResponse.#ctor(System.Byte[],System.Int32)">
+            <param name="offset">The offset following the NegTokenResp tag</param>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.AuthenticationMessageUtils.IsNTLMv1ExtendedSessionSecurity(System.Byte[])">
+            <summary>
+            If NTLM v1 Extended Session Security is used, LMResponse starts with 8-byte challenge, followed by 16 bytes of padding (set to zero).
+            </summary>
+            <remarks>
+            LMResponse is 24 bytes for NTLM v1, NTLM v1 Extended Session Security and NTLM v2.
+            </remarks>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.AuthenticationMessageUtils.IsNTLMv2NTResponse(System.Byte[])">
+            <remarks>
+            NTLM v1 / NTLM v1 Extended Session Security NTResponse is 24 bytes.
+            </remarks>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMCryptography.ComputeNTLMv2Proof(System.Byte[],System.Byte[],System.String,System.String,System.String)">
+            <summary>
+            [MS-NLMP] https://msdn.microsoft.com/en-us/library/cc236700.aspx
+            </summary>
+            <param name="clientChallengeStructurePadded">ClientChallengeStructure with 4 zero bytes padding, a.k.a. temp</param>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMCryptography.DesLongEncrypt(System.Byte[],System.Byte[])">
+            <summary>
+            DESL()
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMCryptography.LMOWFv1(System.String)">
+            <summary>
+            LM Hash
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMCryptography.NTOWFv1(System.String)">
+            <summary>
+            NTLM hash (NT hash)
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMCryptography.LMOWFv2(System.String,System.String,System.String)">
+            <summary>
+            LMOWFv2 is identical to NTOWFv2
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMCryptography.ExtendDESKey(System.Byte[])">
+            <summary>
+            Extends a 7-byte key into an 8-byte key.
+            Note: The DES key ostensibly consists of 64 bits, however, only 56 of these are actually used by the algorithm.
+            Eight bits are used solely for checking parity, and are thereafter discarded
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMCryptography.KXKey(System.Byte[],SMBLibrary.Authentication.NTLM.NegotiateFlags,System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            [MS-NLMP] 3.4.5.1 - KXKEY - NTLM v1
+            </summary>
+            <remarks>
+            If NTLM v2 is used, KeyExchangeKey MUST be set to the value of SessionBaseKey.
+            </remarks>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMCryptography.ValidateAuthenticateMessageMIC(System.Byte[],System.Byte[],System.Byte[],System.Byte[])">
+            <remarks>
+            Caller must verify that the authenticate message has MIC before calling this method
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.Authentication.NTLM.GetUserPassword">
+            <returns>null if the account does not exist</returns>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.IndependentNTLMAuthenticationProvider.#ctor(SMBLibrary.Authentication.NTLM.GetUserPassword)">
+            <param name="getUserPassword">
+            The NTLM challenge response will be compared against the provided password.
+            </param>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.IndependentNTLMAuthenticationProvider.AuthenticateV1(System.String,System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            LM v1 / NTLM v1
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.IndependentNTLMAuthenticationProvider.AuthenticateV1Extended(System.String,System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            LM v1 / NTLM v1 Extended Session Security
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.IndependentNTLMAuthenticationProvider.AuthenticateV2(System.String,System.String,System.String,System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            LM v2 / NTLM v2
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.IndependentNTLMAuthenticationProvider.GenerateServerChallenge">
+            <summary>
+            Generate 8-byte server challenge
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Authentication.NTLM.AuthenticateMessage">
+            <summary>
+            [MS-NLMP] AUTHENTICATE_MESSAGE (Type 3 Message)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Authentication.NTLM.ChallengeMessage">
+            <summary>
+            [MS-NLMP] CHALLENGE_MESSAGE (Type 2 Message)
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.Authentication.NTLM.NegotiateFlags.LanManagerSessionKey">
+            <summary>
+            LanManagerSessionKey and ExtendedSessionSecurity are mutually exclusive
+            If both are set then LanManagerSessionKey must be ignored
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.Authentication.NTLM.NegotiateFlags.Anonymous">
+            <summary>
+            If set, the connection SHOULD be anonymous
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.Authentication.NTLM.NegotiateFlags.ExtendedSessionSecurity">
+            <summary>
+            LanManagerSessionKey and ExtendedSessionSecurity are mutually exclusive
+            If both are set then LanManagerSessionKey must be ignored.
+            NTLM v2 requires this flag to be set.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Authentication.NTLM.NegotiateMessage">
+            <summary>
+            [MS-NLMP] NEGOTIATE_MESSAGE (Type 1 Message)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Authentication.NTLM.NTLMv2ClientChallenge">
+            <summary>
+            NTLMv2_CLIENT_CHALLENGE
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Authentication.NTLM.NTLMv2ClientChallenge.GetBytesPadded">
+            <summary>
+            [MS-NLMP] Page 60, Response key calculation algorithm:
+            To create 'temp', 4 zero bytes will be appended to NTLMv2_CLIENT_CHALLENGE
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Authentication.NTLM.NTLMVersion">
+            <summary>
+            [MS-NLMP] 2.2.2.10 - VERSION
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Client.Authentication.IAuthenticationClient.InitializeSecurityContext(System.Byte[])">
+            <returns>Credentials blob or null if security blob is invalid</returns>
+        </member>
+        <member name="M:SMBLibrary.Client.ServerServiceHelper.ListShares(SMBLibrary.INTFileStore,System.String,System.Nullable{SMBLibrary.Services.ShareType},SMBLibrary.NTStatus@)">
+            <param name="serverName">
+            When a Windows Server host is using Failover Cluster and Cluster Shared Volumes, each of those CSV file shares is associated
+            with a specific host name associated with the cluster and is not accessible using the node IP address or node host name.
+            </param>
+        </member>
+        <member name="M:SMBLibrary.Client.SMB2Client.Connect(System.String,SMBLibrary.SMBTransportType)">
+            <param name="serverName">
+            When a Windows Server host is using Failover Cluster and Cluster Shared Volumes, each of those CSV file shares is associated
+            with a specific host name associated with the cluster and is not accessible using the node IP address or node host name.
+            </param>
+        </member>
+        <member name="T:SMBLibrary.RequestGetDfsReferral">
+            <summary>
+            [MS-DFSC] REQ_GET_DFS_REFERRAL
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.ResponseGetDfsReferral">
+            <summary>
+            [MS-DFSC] RESP_GET_DFS_REFERRAL
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.FileTimeHelper.ReadSetFileTime(System.Byte[],System.Int32)">
+            <summary>
+            When setting file attributes, a value of -1 indicates to the server that it MUST NOT change this attribute for all subsequent operations on the same file handle.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.FileTimeHelper.WriteSetFileTime(System.Byte[],System.Int32,SMBLibrary.SetFileTime)">
+            <summary>
+            When setting file attributes, a value of -1 indicates to the server that it MUST NOT change this attribute for all subsequent operations on the same file handle.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SP800_1008">
+            <summary>
+            Implements the NIST SP800-108 key derivation routine in counter mode with an HMAC PRF.
+            See: http://csrc.nist.gov/publications/nistpubs/800-108/sp800-108.pdf
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.NetBiosSuffix">
+            <summary>
+            16th character suffix for netbios name.
+            see http://support.microsoft.com/kb/163409/en-us
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.OperationFlags">
+            <summary>
+            [RFC 1002] 4.2.1.1. HEADER
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.NameQueryRequest">
+            <summary>
+            [RFC 1002] 4.2.12. NAME QUERY REQUEST
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.NameRegistrationRequest">
+            <summary>
+            [RFC 1002] 4.2.2. NAME REGISTRATION REQUEST
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.NameServicePacketHeader">
+            <summary>
+            [RFC 1002] 4.2.1.1. HEADER
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.NodeStatusRequest">
+            <summary>
+            [RFC 1002] 4.2.17. NODE STATUS REQUEST
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.NodeStatusResponse">
+            <summary>
+            [RFC 1002] 4.2.18. NODE STATUS RESPONSE
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.PositiveNameQueryResponse">
+            <summary>
+            [RFC 1002] 4.2.13. POSITIVE NAME QUERY RESPONSE
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.QuestionSection">
+            <summary>
+            [RFC 1002] 4.2.1.2. QUESTION SECTION
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.ResourceRecord">
+            <summary>
+            [RFC 1002] 4.2.1.3. RESOURCE RECORD
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.NetBios.NBTConnectionReceiveBuffer.#ctor(System.Int32)">
+            <param name="bufferLength">Must be large enough to hold the largest possible NBT packet</param>
+        </member>
+        <member name="M:SMBLibrary.NetBios.NBTConnectionReceiveBuffer.DequeuePacket">
+            <summary>
+            HasCompletePacket must be called and return true before calling DequeuePacket
+            </summary>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="M:SMBLibrary.NetBios.NBTConnectionReceiveBuffer.DequeuePacketBytes">
+            <summary>
+            HasCompletePDU must be called and return true before calling DequeuePDUBytes
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.NetBios.NetBiosUtils.GetMSNetBiosName(System.String,SMBLibrary.NetBios.NetBiosSuffix)">
+            <summary>
+            The NetBIOS naming convention allows for 16 characters in a NetBIOS name.
+            Microsoft, however, limits NetBIOS names to 15 characters and uses the 16th character as a NetBIOS suffix
+            See http://support.microsoft.com/kb/163409/en-us
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.NetBios.NetBiosUtils.EncodeName(System.String,System.String)">
+            <param name="netBiosName">NetBIOS name</param>
+            <param name="scopeID">dot-separated labels, formatted per DNS naming rules</param>
+        </member>
+        <member name="M:SMBLibrary.NetBios.NetBiosUtils.FirstLevelEncoding(System.String,System.String)">
+            <param name="netBiosName">NetBIOS name</param>
+            <param name="scopeID">dot-separated labels, formatted per DNS naming rules</param>
+        </member>
+        <member name="M:SMBLibrary.NetBios.NetBiosUtils.SecondLevelEncoding(System.String)">
+            <summary>
+            The on-the-wire format of an NBT name. The encoding scheme replaces the familiar dot characters
+            used in DNS names with a byte containing the length of the next label.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.NetBios.NetBiosUtils.WriteNamePointer(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Will write a 2 bytes pointer to a name
+            Note: NetBIOS implementations can only use label string pointers in Name Service packets
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.SessionPacketTypeName">
+            <summary>
+            [RFC 1002] 4.2.1.1. HEADER
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.NegativeSessionResponsePacket">
+            <summary>
+            [RFC 1002] 4.3.4. NEGATIVE SESSION RESPONSE PACKET
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.PositiveSessionResponsePacket">
+            <summary>
+            [RFC 1002] 4.3.3. POSITIVE SESSION RESPONSE PACKET
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.SessionKeepAlivePacket">
+            <summary>
+            [RFC 1002] 4.3.7. SESSION KEEP ALIVE PACKET
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.SessionMessagePacket">
+            <summary>
+            [RFC 1002] 4.3.6. SESSION MESSAGE PACKET
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.SessionPacket">
+            <summary>
+            [RFC 1002] 4.3.1. SESSION PACKET
+            [MS-SMB2] 2.1 Transport - Direct TCP transport packet
+            </summary>
+            <remarks>
+            We extend this implementation to support Direct TCP transport packet which utilize the unused session packet flags to extend the maximum trailer length.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.NetBios.SessionRequestPacket">
+            <summary>
+            [RFC 1002] 4.3.2. SESSION REQUEST PACKET
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.NetBios.SessionRetargetResponsePacket">
+            <summary>
+            [RFC 1002] 4.3.5. SESSION RETARGET RESPONSE PACKET
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.AccessMask">
+            <summary>
+            [MS-DTYP] 2.4.3 - ACCESS_MASK
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.DirectoryAccessMask">
+            <summary>
+            [MS-SMB] 2.2.1.4.2 - Directory_Access_Mask
+            [MS-SMB2] 2.2.13.1.2 - Directory_Access_Mask
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileAccessMask">
+            <summary>
+            [MS-SMB] 2.2.1.4.1 - File_Pipe_Printer_Access_Mask
+            [MS-SMB2] 2.2.13.1.1 - File_Pipe_Printer_Access_Mask
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileAttributes">
+            <summary>
+            [MS-FSCC] 2.6 - FileAttributes 
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.FileAttributes.Normal">
+            <summary>
+            A file that does not have other attributes set.
+            This attribute is valid only when used alone.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileInformationClass">
+            <summary>
+            [MS-FSCC] 2.4 - File Information Classes
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileSystemInformationClass">
+            <summary>
+            [MS-FSCC] 2.5 - File System Information Classes
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateDisposition.FILE_SUPERSEDE">
+            <summary>
+            If the file already exists, replace it with the given file.
+            If it does not, create the given file.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateDisposition.FILE_OPEN">
+            <summary>
+            If the file already exists, open it [instead of creating a new file].
+            If it does not, fail the request [and do not create a new file].
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateDisposition.FILE_CREATE">
+            <summary>
+            If the file already exists, fail the request [and do not create or open the given file].
+            If it does not, create the given file.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateDisposition.FILE_OPEN_IF">
+            <summary>
+            If the file already exists, open it.
+            If it does not, create the given file.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateDisposition.FILE_OVERWRITE">
+            <summary>
+            If the file already exists, open it and overwrite it.
+            If it does not, fail the request.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateDisposition.FILE_OVERWRITE_IF">
+            <summary>
+            If the file already exists, open it and overwrite it.
+            If it does not, create the given file.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_DIRECTORY_FILE">
+            <summary>
+            The file being created or opened is a directory file.
+            With this option, the CreateDisposition field MUST be set to FILE_CREATE, FILE_OPEN, or FILE_OPEN_IF.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_WRITE_THROUGH">
+            <summary>
+            Applications that write data to the file MUST actually transfer the data into the file before any write request is considered complete.
+            If FILE_NO_INTERMEDIATE_BUFFERING is set, the server MUST perform as if FILE_WRITE_THROUGH is set in the create request.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_SEQUENTIAL_ONLY">
+            <summary>
+            This option indicates that access to the file can be sequential.
+            The server can use this information to influence its caching and read-ahead strategy for this file.
+            The file MAY in fact be accessed randomly, but the server can optimize its caching and read-ahead policy for sequential access.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_NO_INTERMEDIATE_BUFFERING">
+            <summary>
+            The file SHOULD NOT be cached or buffered in an internal buffer by the server.
+            This option is incompatible when the FILE_APPEND_DATA bit field is set in the DesiredAccess field.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_NON_DIRECTORY_FILE">
+            <summary>
+            If the file being opened is a directory, the server MUST fail the request with STATUS_FILE_IS_A_DIRECTORY
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_NO_EA_KNOWLEDGE">
+            <summary>
+            The application that initiated the client's request does not support extended attributes (EAs).
+            If the EAs on an existing file being opened indicate that the caller SHOULD support EAs to correctly interpret the file, the server SHOULD fail this request with STATUS_ACCESS_DENIED.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_OPEN_REMOTE_INSTANCE">
+            <summary>
+            formerly known as FILE_OPEN_FOR_RECOVERY
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_RANDOM_ACCESS">
+            <summary>
+            Indicates that access to the file can be random.
+            The server MAY use this information to influence its caching and read-ahead strategy for this file.
+            This is a hint to the server that sequential read-ahead operations might not be appropriate on the file.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_DELETE_ON_CLOSE">
+            <summary>
+            The file SHOULD be automatically deleted when the last open request on this file is closed.
+            When this option is set, the DesiredAccess field MUST include the DELETE flag.
+            This option is often used for temporary files.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_OPEN_BY_FILE_ID">
+            <summary>
+            Opens a file based on the FileId.
+            If this option is set, the server MUST fail the request with STATUS_NOT_SUPPORTED in the Status field of the SMB Header in the server response.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_OPEN_FOR_BACKUP_INTENT">
+            <summary>
+            The file is being opened or created for the purposes of either a backup or a restore operation.
+            Thus, the server can make appropriate checks to ensure that the caller is capable of overriding
+            whatever security checks have been placed on the file to allow a backup or restore operation to occur.
+            The server can check for certain access rights to the file before checking the DesiredAccess field.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_NO_COMPRESSION">
+            <summary>
+            When a new file is created, the file MUST NOT be compressed, even if it is on a compressed volume.
+            The flag MUST be ignored when opening an existing file.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.CreateOptions.FILE_OPEN_NO_RECALL">
+            <summary>
+            In a hierarchical storage management environment, this option requests that the file SHOULD NOT be recalled from tertiary storage such as tape.
+            A file recall can take up to several minutes in a hierarchical storage management environment.
+            The clients can specify this option to avoid such delays.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.ShareAccess">
+            <summary>
+            No bits set = Prevents the file from being shared
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.ImpersonationLevel">
+            <summary>
+            https://msdn.microsoft.com/en-us/library/windows/desktop/aa379572(v=vs.85).aspx
+            https://msdn.microsoft.com/en-us/library/windows/hardware/ff556631(v=vs.85).aspx
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SecurityInformation">
+            <summary>
+            [MS-DTYP] 2.4.7 - SECURITY_INFORMATION
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.INTFileStore">
+            <summary>
+            A file store (a.k.a. object store) interface to allow access to a file system or a named pipe in an NT-like manner dictated by the SMB protocol.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.INTFileStore.NotifyChange(System.Object@,System.Object,SMBLibrary.NotifyChangeFilter,System.Boolean,System.Int32,SMBLibrary.OnNotifyChangeCompleted,System.Object)">
+            <summary>
+            Monitor the contents of a directory (and its subdirectories) by using change notifications.
+            When something changes within the directory being watched this operation is completed.
+            </summary>
+            <returns>
+            STATUS_PENDING - The directory is being watched, change notification will be provided using callback method.
+            STATUS_NOT_SUPPORTED - The underlying object store does not support change notifications.
+            STATUS_INVALID_HANDLE - The handle supplied is invalid.
+            </returns>
+        </member>
+        <member name="M:SMBLibrary.NTFileStoreHelper.ToFileAccess(SMBLibrary.AccessMask)">
+            <summary>
+            Will return desired FileAccess rights to the file data.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.NTFileStoreHelper.ToFileAccess(SMBLibrary.FileAccessMask)">
+            <summary>
+            Will return desired FileAccess rights to the file data.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileBothDirectoryInformation">
+            <summary>
+            [MS-FSCC] 2.4.8 - FileBothDirectoryInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileDirectoryInformation">
+            <summary>
+            [MS-FSCC] 2.4.10 - FileDirectoryInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFullDirectoryInformation">
+            <summary>
+            [MS-FSCC] 2.4.14 - FileFullDirectoryInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileIdBothDirectoryInformation">
+            <summary>
+            [MS-FSCC] 2.4.17 - FileIdBothDirectoryInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileIdFullDirectoryInformation">
+            <summary>
+            [MS-FSCC] 2.4.18 - FileIdFullDirectoryInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileNamesInformation">
+            <summary>
+            [MS-FSCC] 2.4.26 - FileNamesInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileAccessInformation">
+            <summary>
+            [MS-FSCC] 2.4.1 - FileAccessInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileAlignmentInformation">
+            <summary>
+            [MS-FSCC] 2.4.3 - FileAlignmentInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileAllInformation">
+            <summary>
+            [MS-FSCC] 2.4.2 - FileAllInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileAlternateNameInformation">
+            <summary>
+            [MS-FSCC] 2.4.5 - FileAlternateNameInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileBasicInformation">
+            <summary>
+            [MS-FSCC] 2.4.7 - FileBasicInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileCompressionInformation">
+            <summary>
+            [MS-FSCC] 2.4.9 - FileCompressionInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileEaInformation">
+            <summary>
+            [MS-FSCC] 2.4.12 - FileEaInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFullEAEntry">
+            <summary>
+            [MS-FSCC] 2.4.15 - FileFullEaInformation data element
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFullEAInformation">
+            <summary>
+            [MS-FSCC] 2.4.15 - FileFullEaInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileInternalInformation">
+            <summary>
+            [MS-FSCC] 2.4.20 - FileInternalInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileModeInformation">
+            <summary>
+            [MS-FSCC] 2.4.24 - FileModeInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileNameInformation">
+            <summary>
+            [MS-FSCC] 2.1.7 - FILE_NAME_INFORMATION
+            [MS-FSCC] 2.4.25 - FileNameInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileNetworkOpenInformation">
+            <summary>
+            [MS-FSCC] 2.4.12 - FileNetworkOpenInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FilePositionInformation">
+            <summary>
+            [MS-FSCC] 2.4.32 - FilePositionInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileStandardInformation">
+            <summary>
+            [MS-FSCC] 2.4.38 - FileStandardInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileStreamEntry">
+            <summary>
+            [MS-FSCC] 2.4.40 - FileStreamInformation data element
+            </summary>
+        </member>
+        <member name="P:SMBLibrary.FileStreamEntry.PaddedLength">
+            <summary>
+            [MS-FSCC] When multiple FILE_STREAM_INFORMATION data elements are present in the buffer, each MUST be aligned on an 8-byte boundary
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileStreamInformation">
+            <summary>
+            [MS-FSCC] 2.4.40 - FileStreamInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileAllocationInformation">
+            <summary>
+            [MS-FSCC] 2.4.4 - FileAllocationInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileDispositionInformation">
+            <summary>
+            [MS-FSCC] 2.4.11 - FileDispositionInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileEndOfFileInformation">
+            <summary>
+            [MS-FSCC] 2.4.13 - FileEndOfFileInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileLinkInformationType1">
+            <summary>
+            [MS-FSCC] 2.4.21.1 - FileLinkInformation Type 1
+            </summary>
+            <remarks>
+            [MS-FSA] 2.1.5.14.6
+            FILE_LINK_INFORMATION_TYPE_1: Used for 32-bit local clients and the SMB1 protocol.
+            FILE_LINK_INFORMATION_TYPE_2: Used for 64-bit local clients and the SMB2 protocol.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.FileLinkInformationType2">
+            <summary>
+            [MS-FSCC] 2.4.21.2 - FileLinkInformation Type 2
+            </summary>
+            <remarks>
+            [MS-FSA] 2.1.5.14.6
+            FILE_LINK_INFORMATION_TYPE_1: Used for 32-bit local clients and the SMB1 protocol.
+            FILE_LINK_INFORMATION_TYPE_2: Used for 64-bit local clients and the SMB2 protocol.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.FileRenameInformationType1">
+            <summary>
+            [MS-FSCC] 2.4.34.1 - FileRenameInformation Type 1
+            </summary>
+            <remarks>
+            [MS-FSA] 2.1.5.14.11
+            FILE_RENAME_INFORMATION_TYPE_1: Used for 32-bit local clients and the SMB1 protocol.
+            FILE_RENAME_INFORMATION_TYPE_2: Used for 64-bit local clients and the SMB2 protocol.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.FileRenameInformationType2">
+            <summary>
+            [MS-FSCC] 2.4.34.2 - FileRenameInformation Type 2
+            </summary>
+            <remarks>
+            [MS-FSA] 2.1.5.14.11
+            FILE_RENAME_INFORMATION_TYPE_1: Used for 32-bit local clients and the SMB1 protocol.
+            FILE_RENAME_INFORMATION_TYPE_2: Used for 64-bit local clients and the SMB2 protocol.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.FileValidDataLengthInformation">
+            <summary>
+            [MS-FSCC] 2.4.41 - FileValidDataLengthInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SetFileTime">
+            <summary>
+            [MS-FSCC] When setting file attributes, a value of -1 indicates to the server that it MUST NOT change this attribute for all subsequent operations on the same file handle.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileNotifyInformation">
+            <summary>
+            [MS-FSCC] 2.4.42 - FileNotifyInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFsAttributeInformation">
+            <summary>
+            [MS-FSCC] 2.5.1 - FileFsAttributeInformation
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.FileFsAttributeInformation.MaximumComponentNameLength">
+            <summary>
+            Maximum file name component length, in bytes, supported by the specified file system.
+            The value of this field MUST be greater than zero and MUST be no more than 510.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFsControlInformation">
+            <summary>
+            [MS-FSCC] 2.5.2 - FileFsControlInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFsDeviceInformation">
+            <summary>
+            [MS-FSCC] 2.5.10 - FileFsDeviceInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFsFullSizeInformation">
+            <summary>
+            [MS-FSCC] 2.5.4 - FileFsFullSizeInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFsObjectIdInformation">
+            <summary>
+            [MS-FSCC] 2.5.6 - FileFsObjectIdInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFsSectorSizeInformation">
+            <summary>
+            [MS-FSCC] 2.5.4 - FileFsSectorSizeInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFsSizeInformation">
+            <summary>
+            [MS-FSCC] 2.5.8 - FileFsSizeInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.FileFsVolumeInformation">
+            <summary>
+            [MS-FSCC] 2.5.9 - FileFsVolumeInformation
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.ObjectIDBufferType1">
+            <summary>
+            [MS-FSCC] 2.1.3.1 - FILE_OBJECTID_BUFFER Type 1
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.PipeWaitRequest">
+            <summary>
+            [MS-FSCC] 2.3.31 - FSCTL_PIPE_WAIT Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.AccessAllowedACE">
+            <summary>
+            [MS-DTYP] ACCESS_ALLOWED_ACE
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.ACE">
+            <summary>
+            [MS-DTYP] ACE (Access Control Entry)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.AceHeader">
+            <summary>
+            [MS-DTYP] ACE_HEADER
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.ACL">
+            <summary>
+            [MS-DTYP] ACL (Access Control List)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SecurityDescriptorControl">
+            <summary>
+            SECURITY_DESCRIPTOR_CONTROL
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SecurityDescriptor">
+            <summary>
+            [MS-DTYP] SECURITY_DESCRIPTOR
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SID">
+            <summary>
+            [MS-DTYP] 2.4.2.2 - SID (Packet Representation)
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.RPC.NegotiationResult.NegotiateAck">
+            <summary>
+            Microsoft extension:
+            [MS-RPCE] 2.2.2.4 - negotiate_ack
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.INDRStructure">
+            <summary>
+            Serializable Structure / Union / Array
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.RPC.NDRConformantArray`1.Read(SMBLibrary.RPC.NDRParser)">
+            <summary>
+            See DCE 1.1: Remote Procedure Call - 14.3.3.2 - Uni-dimensional Conformant Arrays
+            </summary>
+            <param name="parser"></param>
+        </member>
+        <member name="T:SMBLibrary.RPC.NDRParser">
+            <summary>
+            NDR - Native Data Representation
+            See DCE 1.1: Remote Procedure Call, Chapter 14 - Transfer Syntax NDR
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.RPC.NDRParser.AddDeferredStructure(SMBLibrary.RPC.INDRStructure)">
+            <summary>
+            Add embedded pointer deferred structure (referent) parser
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.NDRTypeName">
+            <summary>
+            Primitive and construced types
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.NDRWriter">
+            <summary>
+            NDR - Native Data Representation
+            See DCE 1.1: Remote Procedure Call, Chapter 14 - Transfer Syntax NDR
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.RPC.NDRWriter.AddDeferredStructure(SMBLibrary.RPC.INDRStructure)">
+            <summary>
+            Add embedded pointer deferred structure (referent) writer
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.BindAckPDU">
+            <summary>
+            rpcconn_bind_ack_hdr_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.BindNakPDU">
+            <summary>
+            rpcconn_bind_nak_hdr_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.BindPDU">
+            <summary>
+            rpcconn_bind_hdr_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.FaultPDU">
+            <summary>
+            rpcconn_fault_hdr_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.RequestPDU">
+            <summary>
+            rpcconn_request_hdr_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.ResponsePDU">
+            <summary>
+            rpcconn_response_hdr_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.RPCPDU">
+            <summary>
+            See DCE 1.1: Remote Procedure Call, Chapter 12.6 - Connection-oriented RPC PDUs
+            </summary>
+        </member>
+        <member name="P:SMBLibrary.RPC.RPCPDU.Length">
+            <summary>
+            The length of the entire PDU
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.RPC.RPCHelper.ReadPortAddress(System.Byte[],System.Int32)">
+            <summary>
+            Read port_any_t string structure
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.ContextElement">
+            <summary>
+            p_cont_elem_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.ContextList">
+            <summary>
+            p_cont_list_t
+            Presentation Context List
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.ResultElement">
+            <summary>
+            p_result_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.ResultList">
+            <summary>
+            p_result_list_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.SyntaxID">
+            <summary>
+            p_syntax_id_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.Version">
+            <summary>
+            version_t
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.RPC.VersionsSupported">
+            <summary>
+            p_rt_versions_supported_t
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.ConnectionManager.SendSMBKeepAlive(System.TimeSpan)">
+            <summary>
+            Some broken NATs will reply to TCP KeepAlive even after the client initiating the connection has long gone,
+            This methods prevent such connections from hanging around indefinitely by sending an unsolicited ECHO response to make sure the connection is still alive.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.ConnectionState.CloseSessions">
+            <summary>
+            Free all resources used by the active sessions in this connection
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1ConnectionState.AllocateUserID">
+            <summary>
+            An open UID MUST be unique within an SMB connection.
+            The value of 0xFFFE SHOULD NOT be used as a valid UID. All other possible values for a UID, excluding zero (0x0000), are valid.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1ConnectionState.CreateSession(System.String,System.String,System.Byte[],System.Object)">
+            <returns>null if all UserID values have already been allocated</returns>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1ConnectionState.AllocateTreeID">
+            <summary>
+            An open TID MUST be unique within an SMB connection.
+            The value 0xFFFF MUST NOT be used as a valid TID. All other possible values for TID, including zero (0x0000), are valid.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1ConnectionState.AllocateFileID">
+            <summary>
+            A FID returned from an Open or Create operation MUST be unique within an SMB connection.
+            The value 0xFFFF MUST NOT be used as a valid FID. All other possible values for FID, including zero (0x0000) are valid.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1Session.AddOpenFile(System.UInt16,System.String,System.String,System.Object,System.IO.FileAccess)">
+            <param name="relativePath">The path relative to the share</param>
+            <returns>FileID</returns>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1Session.Close">
+            <summary>
+            Free all resources used by this session
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB2Session.Close">
+            <summary>
+            Free all resources used by this session
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.ServerPathUtils.GetRelativeServerPath(System.String)">
+            <param name="path">UNC path, e.g. '\\192.168.1.1\Shared'</param>
+            <returns>e.g. \Shared</returns>
+        </member>
+        <member name="M:SMBLibrary.Server.ServerPathUtils.GetRelativeSharePath(System.String)">
+            <param name="path">UNC path, e.g. '\\192.168.1.1\Shared\*'</param>
+            <returns>e.g. \*</returns>
+        </member>
+        <member name="T:SMBLibrary.Server.NameServer">
+            <summary>
+            NetBIOS name service server
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Server.CachingPolicy">
+            <summary>
+            Client-Side Caching Policy
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.Server.CachingPolicy.ManualCaching">
+            <summary>
+            The client can cache files that are explicitly selected by the user for offline use.
+            Automatic file-by-file reintegration is not allowed.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.Server.CachingPolicy.AutoCaching">
+            <summary>
+            The client can automatically cache files that are used by the user for offline access.
+            Automatic file-by-file reintegration is allowed.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.Server.CachingPolicy.VideoCaching">
+            <summary>
+            The client can automatically cache files that are used by the user for offline access.
+            Clients are permitted to work from their local cache even while online.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.Server.CachingPolicy.NoCaching">
+            <summary>
+            No offline caching is allowed for this share.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMBShareCollection.GetShareFromName(System.String)">
+            <param name="shareName">e.g. \Shared</param>
+        </member>
+        <member name="T:SMBLibrary.Server.SMB1.NegotiateHelper">
+            <summary>
+            Negotiate helper
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1.NTTransactHelper.GetNTTransactResponse(SMBLibrary.SMB1.SMB1Header,SMBLibrary.SMB1.NTTransactRequest,SMBLibrary.Server.ISMBShare,SMBLibrary.Server.SMB1ConnectionState)">
+            <summary>
+            The client MUST send as many secondary requests as are needed to complete the transfer of the transaction request.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1.NTTransactHelper.GetNTTransactResponse(SMBLibrary.SMB1.SMB1Header,SMBLibrary.SMB1.NTTransactSecondaryRequest,SMBLibrary.Server.ISMBShare,SMBLibrary.Server.SMB1ConnectionState)">
+            <summary>
+            There are no secondary response messages.
+            The client MUST send as many secondary requests as are needed to complete the transfer of the transaction request.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Server.SMB1.SessionSetupHelper">
+            <summary>
+            Session Setup helper
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1.SMB1FileStoreHelper.QueryDirectory(System.Collections.Generic.List{SMBLibrary.QueryDirectoryFileInformation}@,SMBLibrary.INTFileStore,System.String,SMBLibrary.FileInformationClass,SMBLibrary.SecurityContext)">
+            <param name="fileNamePattern">The filename pattern to search for. This field MAY contain wildcard characters</param>
+            <exception cref="T:System.UnauthorizedAccessException"></exception>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1.TransactionHelper.GetTransactionResponse(SMBLibrary.SMB1.SMB1Header,SMBLibrary.SMB1.TransactionRequest,SMBLibrary.Server.ISMBShare,SMBLibrary.Server.SMB1ConnectionState)">
+            <summary>
+            The client MUST send as many secondary requests as are needed to complete the transfer of the transaction request.
+            The server MUST respond to the transaction request as a whole.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB1.TransactionHelper.GetTransactionResponse(SMBLibrary.SMB1.SMB1Header,SMBLibrary.SMB1.TransactionSecondaryRequest,SMBLibrary.Server.ISMBShare,SMBLibrary.Server.SMB1ConnectionState)">
+            <summary>
+            There are no secondary response messages.
+            The client MUST send as many secondary requests as are needed to complete the transfer of the transaction request.
+            The server MUST respond to the transaction request as a whole.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMB2.ChangeNotifyHelper.GetChangeNotifyInterimResponse(SMBLibrary.SMB2.ChangeNotifyRequest,SMBLibrary.Server.ISMBShare,SMBLibrary.Server.SMB2ConnectionState)">
+            <remarks>
+            'NoRemoteChangeNotify' can be set in the registry to prevent the client from sending ChangeNotify requests altogether.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.Server.SMB2.NegotiateHelper">
+            <summary>
+            Negotiate helper
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Server.SMB2.SessionSetupHelper">
+            <summary>
+            Session Setup helper
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMBServer.Start(System.Net.IPAddress,SMBLibrary.SMBTransportType,System.Boolean,System.Boolean,System.Boolean,System.Nullable{System.TimeSpan})">
+            <param name="connectionInactivityTimeout">
+            The duration after which an unsolicited ECHO response will be sent if no data has been sent or received.
+            Some broken NATs will reply to TCP KeepAlive even after the client initiating the connection has long gone,
+            to prevent such connections from hanging around indefinitely, this parameter can be used.
+            </param>
+            <exception cref="T:System.Net.Sockets.SocketException"></exception>
+        </member>
+        <member name="M:SMBLibrary.Server.SMBServer.ProcessSMB1Command(SMBLibrary.SMB1.SMB1Header,SMBLibrary.SMB1.SMB1Command,SMBLibrary.Server.ConnectionState@)">
+            <summary>
+            May return an empty list
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.Server.SMBServer.ProcessSMB2Command(SMBLibrary.SMB2.SMB2Command,SMBLibrary.Server.ConnectionState@)">
+            <summary>
+            May return null
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.PlatformName">
+            <summary>
+            [MS-SRVS] 2.2.2.6
+            </summary>
+        </member>
+        <member name="P:SMBLibrary.Services.RPCPipeStream.MessageLength">
+            <summary>
+            The length of the first message available in the pipe
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ShareType">
+            <summary>
+            [MS-SRVS] 2.2.2.4 Share Types
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ServerType">
+            <summary>
+            [MS-SRVS] 2.2.2.7 Software Type Flags
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.NetrServerGetInfoRequest">
+            <summary>
+            NetrServerGetInfo Request (opnum 21)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.NetrServerGetInfoResponse">
+            <summary>
+            NetrServerGetInfo Response (opnum 21)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.NetrShareEnumRequest">
+            <summary>
+            NetrShareEnum Request (opnum 15)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.NetrShareEnumResponse">
+            <summary>
+            NetrShareEnum Response (opnum 15)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.NetrShareGetInfoRequest">
+            <summary>
+            NetrShareGetInfo Request (opnum 16)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.NetrShareGetInfoResponse">
+            <summary>
+            NetrShareGetInfo Response (opnum 16)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ServerService">
+            <summary>
+            [MS-SRVS]
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ServerInfo">
+            <summary>
+            [MS-SRVS] SERVER_INFO Union
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ServerInfo100">
+            <summary>
+            [MS-SRVS] SERVER_INFO_100
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ServerInfo101">
+            <summary>
+            [MS-SRVS] SERVER_INFO_101
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ShareEnum">
+            <summary>
+            [MS-SRVS] SHARE_ENUM_STRUCT and the embedded SHARE_ENUM_UNION
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ShareInfo">
+            <summary>
+            [MS-SRVS] SHARE_INFO Union
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ShareInfo0Container">
+            <summary>
+            [MS-SRVS] SHARE_INFO_0_CONTAINER
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ShareInfo0Entry">
+            <summary>
+            [MS-SRVS] SHARE_INFO_0
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ShareInfo1Container">
+            <summary>
+            [MS-SRVS] SHARE_INFO_1_CONTAINER
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ShareInfo1Entry">
+            <summary>
+            [MS-SRVS] SHARE_INFO_1
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.ShareInfo2Entry">
+            <summary>
+            [MS-SRVS] SHARE_INFO_2
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.NetrWkstaGetInfoRequest">
+            <summary>
+            NetrWkstaGetInfo Request (opnum 0)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.WorkstationInfo">
+            <summary>
+            [MS-WKST] WKSTA_INFO Union
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.WorkstationInfo100">
+            <summary>
+            [MS-WKST] WKSTA_INFO_100
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.WorkstationInfo101">
+            <summary>
+            [MS-WKST] WKSTA_INFO_101
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.Services.WorkstationService">
+            <summary>
+            [MS-WKST]
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.FindInformationHelper.ToFileInformationClass(SMBLibrary.SMB1.FindInformationLevel)">
+            <exception cref="T:SMBLibrary.UnsupportedInformationLevelException"></exception>
+        </member>
+        <member name="M:SMBLibrary.SMB1.FindInformationHelper.ToFindInformationList(System.Collections.Generic.List{SMBLibrary.QueryDirectoryFileInformation},System.Boolean,System.Int32)">
+            <exception cref="T:SMBLibrary.UnsupportedInformationLevelException"></exception>
+        </member>
+        <member name="M:SMBLibrary.SMB1.FindInformationHelper.ToFindInformation(SMBLibrary.QueryDirectoryFileInformation)">
+            <exception cref="T:SMBLibrary.UnsupportedInformationLevelException"></exception>
+        </member>
+        <member name="M:SMBLibrary.SMB1.QueryFSInformationHelper.ToFileSystemInformationClass(SMBLibrary.SMB1.QueryFSInformationLevel)">
+            <exception cref="T:SMBLibrary.UnsupportedInformationLevelException"></exception>
+        </member>
+        <member name="M:SMBLibrary.SMB1.QueryInformationHelper.ToFileInformationClass(SMBLibrary.SMB1.QueryInformationLevel)">
+            <exception cref="T:SMBLibrary.UnsupportedInformationLevelException"></exception>
+        </member>
+        <member name="M:SMBLibrary.SMB1.QueryInformationHelper.ToFileInformationLevel(SMBLibrary.FileInformationClass)">
+            <exception cref="T:SMBLibrary.UnsupportedInformationLevelException"></exception>
+        </member>
+        <member name="T:SMBLibrary.SMB1.ExtendedAttributeName">
+            <summary>
+            [MS-CIFS] 2.2.1.2.1 - SMB_GEA
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.ExtendedAttributeNameList">
+            <summary>
+            [MS-CIFS] 2.2.1.2.1.1 - SMB_GEA_LIST
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FullExtendedAttribute">
+            <summary>
+            [MS-CIFS] 2.2.1.2.2 - SMB_FEA
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FullExtendedAttributeList">
+            <summary>
+            [MS-CIFS] 2.2.1.2.2.1 - SMB_FEA_LIST
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FindFileBothDirectoryInfo">
+            <summary>
+            SMB_FIND_FILE_BOTH_DIRECTORY_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FindFileDirectoryInfo">
+            <summary>
+            SMB_FIND_FILE_DIRECTORY_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FindFileFullDirectoryInfo">
+            <summary>
+            SMB_FIND_FILE_FULL_DIRECTORY_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FindFileIDBothDirectoryInfo">
+            <summary>
+            SMB_FIND_FILE_ID_BOTH_DIRECTORY_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FindFileIDFullDirectoryInfo">
+            <summary>
+            SMB_FIND_FILE_ID_FULL_DIRECTORY_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FindFileNamesInfo">
+            <summary>
+            SMB_FIND_FILE_NAMES_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFSAttibuteInfo">
+            <summary>
+            SMB_QUERY_FS_ATTRIBUTE_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFSDeviceInfo">
+            <summary>
+            SMB_QUERY_FS_DEVICE_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFSSizeInfo">
+            <summary>
+            SMB_QUERY_FS_SIZE_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFSVolumeInfo">
+            <summary>
+            SMB_QUERY_FS_VOLUME_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFileAllInfo">
+            <summary>
+            SMB_QUERY_FILE_ALL_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFileAltNameInfo">
+            <summary>
+            SMB_QUERY_FILE_ALT_NAME_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFileBasicInfo">
+            <summary>
+            SMB_QUERY_FILE_BASIC_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFileCompressionInfo">
+            <summary>
+            SMB_QUERY_FILE_COMPRESSION_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFileEaInfo">
+            <summary>
+            SMB_QUERY_FILE_EA_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFileNameInfo">
+            <summary>
+            SMB_QUERY_FILE_NAME_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFileStandardInfo">
+            <summary>
+            SMB_QUERY_FILE_STANDARD_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryFileStreamInfo">
+            <summary>
+            SMB_QUERY_FILE_STREAM_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SetFileAllocationInfo">
+            <summary>
+            SMB_SET_FILE_ALLOCATION_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SetFileBasicInfo">
+            <summary>
+            SMB_SET_FILE_BASIC_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SetFileDispositionInfo">
+            <summary>
+            SMB_SET_FILE_DISPOSITION_INFO
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.SetFileDispositionInfo.DeletePending">
+            <summary>
+            Indicate that a file SHOULD be deleted when it is closed.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SetFileEndOfFileInfo">
+            <summary>
+            SMB_SET_FILE_END_OF_FILE_INFO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.CheckDirectoryRequest">
+            <summary>
+            SMB_COM_CHECK_DIRECTORY Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.CheckDirectoryResponse">
+            <summary>
+            SMB_COM_CHECK_DIRECTORY Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.CloseRequest">
+            <summary>
+            SMB_COM_CLOSE Request
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.CloseRequest.LastTimeModified">
+            <summary>
+            A value of 0x00000000 or 0xFFFFFFFF results in the server not updating the last modification time
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.CloseResponse">
+            <summary>
+            SMB_COM_CLOSE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.CreateDirectoryRequest">
+            <summary>
+            SMB_COM_CREATE_DIRECTORY Request.
+            This command is obsolete.
+            This command is used by Windows NT4 SP6.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.CreateDirectoryResponse">
+            <summary>
+            SMB_COM_CREATE_DIRECTORY Response.
+            This command is obsolete.
+            This command is used by Windows NT4 SP6.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.DeleteDirectoryRequest">
+            <summary>
+            SMB_COM_DELETE_DIRECTORY Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.DeleteDirectoryResponse">
+            <summary>
+            SMB_COM_DELETE_DIRECTORY Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.DeleteRequest">
+            <summary>
+            SMB_COM_DELETE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.DeleteResponse">
+            <summary>
+            SMB_COM_DELETE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.EchoRequest">
+            <summary>
+            SMB_COM_ECHO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.EchoResponse">
+            <summary>
+            SMB_COM_ECHO
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.ErrorResponse">
+            <summary>
+            The Command trailer of an error response message.
+            See [MS-CIFS]3.3.4.1.2 - Sending Any Error Response Message.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FindClose2Request">
+            <summary>
+            SMB_COM_FIND_CLOSE2 Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FindClose2Response">
+            <summary>
+            SMB_COM_FIND_CLOSE2 Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FlushRequest">
+            <summary>
+            SMB_COM_FLUSH Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.FlushResponse">
+            <summary>
+            SMB_COM_FLUSH Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.LockingRange">
+            <summary>
+            LOCKING_ANDX_RANGE32 (10-byte)
+            or
+            LOCKING_ANDX_RANGE64 (24-byte )
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.LockingAndXRequest">
+            <summary>
+            SMB_COM_LOCKING_ANDX Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.LockingAndXResponse">
+            <summary>
+            SMB_COM_LOCKING_ANDX Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.LogoffAndXRequest">
+            <summary>
+            SMB_COM_LOGOFF_ANDX Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.LogoffAndXResponse">
+            <summary>
+            SMB_COM_LOGOFF_ANDX Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NegotiateRequest">
+            <summary>
+            SMB_COM_NEGOTIATE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NegotiateResponse">
+            <summary>
+            SMB_COM_NEGOTIATE Response, NT LAN Manager dialect
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NegotiateResponseExtended">
+            <summary>
+            SMB_COM_NEGOTIATE Response, NT LAN Manager dialect, Extended Security response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NegotiateResponseNotSupported">
+            <summary>
+            SMB_COM_NEGOTIATE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTCancelRequest">
+            <summary>
+            SMB_COM_NT_CANCEL Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTCreateAndXRequest">
+            <summary>
+            SMB_COM_NT_CREATE_ANDX Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTCreateAndXResponse">
+            <summary>
+            SMB_COM_NT_CREATE_ANDX Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTCreateAndXResponseExtended">
+            <summary>
+            SMB_COM_NT_CREATE_ANDX Extended Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactInterimResponse">
+            <summary>
+            SMB_COM_NT_TRANSACT Interim Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactRequest">
+            <summary>
+            SMB_COM_NT_TRANSACT Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactResponse">
+            <summary>
+            SMB_COM_NT_TRANSACT Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactSecondaryRequest">
+            <summary>
+            SMB_COM_NT_TRANSACT_SECONDARY Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.OpenAndXRequest">
+            <summary>
+            SMB_COM_OPEN_ANDX Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.OpenAndXResponse">
+            <summary>
+            SMB_COM_OPEN_ANDX Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.OpenAndXResponseExtended">
+            <summary>
+            SMB_COM_OPEN_ANDX Response Extended
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryInformationRequest">
+            <summary>
+            SMB_COM_QUERY_INFORMATION Request.
+            This command is deprecated.
+            This command is used by Windows NT4 SP6.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.QueryInformationResponse">
+            <summary>
+            SMB_COM_QUERY_INFORMATION Response.
+            This command is deprecated.
+            This command is used by Windows NT4 SP6.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.ReadAndXRequest">
+            <summary>
+            SMB_COM_READ_ANDX Request
+            SMB 1.0: The Timeout field becomes Timeout_or_MaxCountHigh (used when the CAP_LARGE_READX capability has been negotiated)
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.ReadAndXRequest.Timeout_or_MaxCountHigh">
+            <summary>
+            SMB 1.0: When reading from a regular file, the field MUST be interpreted as
+            MaxCountHigh and the two unused bytes MUST be zero.
+            When reading from a name pipe or I/O device, the field MUST be interpreted as Timeout.
+            </summary>
+        </member>
+        <member name="P:SMBLibrary.SMB1.ReadAndXRequest.MaxCountLarge">
+            <summary>
+            The number of bytes to return when reading from a file and LargeRead is negotiated
+            </summary>
+        </member>
+        <member name="P:SMBLibrary.SMB1.ReadAndXRequest.MaxCount">
+            <summary>
+            The number of bytes to return when reading from a named pipe or LargeRead is not negotiated
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.ReadAndXResponse">
+            <summary>
+            SMB_COM_READ_ANDX Response
+            SMB 1.0: The 2 reserved bytes at offset 14 become DataLengthHigh (used when the CAP_LARGE_READX capability has been negotiated)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.ReadRequest">
+            <summary>
+            SMB_COM_READ Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.ReadResponse">
+            <summary>
+            SMB_COM_READ Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.RenameRequest">
+            <summary>
+            SMB_COM_RENAME Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.RenameResponse">
+            <summary>
+            SMB_COM_RENAME Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SessionSetupAndXRequest">
+            <summary>
+            SMB_COM_SESSION_SETUP_ANDX Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SessionSetupAndXRequestExtended">
+            <summary>
+            SMB_COM_SESSION_SETUP_ANDX Extended Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SessionSetupAndXResponse">
+            <summary>
+            SMB_COM_SESSION_SETUP_ANDX Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SessionSetupAndXResponseExtended">
+            <summary>
+            SMB_COM_SESSION_SETUP_ANDX Response, NT LAN Manager dialect, Extended Security response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SetInformation2Request">
+            <summary>
+            SMB_COM_SET_INFORMATION2 Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SetInformation2Response">
+            <summary>
+            SMB_COM_SET_INFORMATION2 Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SetInformationRequest">
+            <summary>
+            SMB_COM_SET_INFORMATION Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SetInformationResponse">
+            <summary>
+            SMB_COM_SET_INFORMATION Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2Request">
+            <summary>
+            SMB_COM_TRANSACTION2 Request
+            The SMB_COM_TRANSACTION2 request format is similar to that of the SMB_COM_TRANSACTION request except for the Name field.
+            The differences are in the subcommands supported, and in the purposes and usages of some of the fields.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2Response">
+            <summary>
+            SMB_COM_TRANSACTION2 Response
+            The SMB_COM_TRANSACTION2 response format is identical to that of the SMB_COM_TRANSACTION response.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2SecondaryRequest">
+            <summary>
+            SMB_COM_TRANSACTION2_SECONDARY Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionInterimResponse">
+            <summary>
+            SMB_COM_TRANSACTION Interim Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionRequest">
+            <summary>
+            SMB_COM_TRANSACTION Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionResponse">
+            <summary>
+            SMB_COM_TRANSACTION Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionSecondaryRequest">
+            <summary>
+            SMB_COM_TRANSACTION_SECONDARY Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TreeConnectAndXRequest">
+            <summary>
+            SMB_COM_TREE_CONNECT_ANDX Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TreeConnectAndXResponse">
+            <summary>
+            SMB_COM_TREE_CONNECT_ANDX Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TreeConnectAndXResponseExtended">
+            <summary>
+            SMB_COM_TREE_CONNECT_ANDX Extended Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TreeDisconnectRequest">
+            <summary>
+            SMB_COM_TREE_DISCONNECT Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TreeDisconnectResponse">
+            <summary>
+            SMB_COM_TREE_DISCONNECT Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.WriteAndXRequest">
+            <summary>
+            SMB_COM_WRITE_ANDX Request
+            SMB 1.0: The 2 reserved bytes at offset 18 become DataLengthHigh (used when the CAP_LARGE_WRITEX capability has been negotiated)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.WriteAndXResponse">
+            <summary>
+            SMB_COM_WRITE_ANDX Response
+            SMB 1.0: The 2 reserved bytes at offset 8 become CountHigh (used when the CAP_LARGE_WRITEX capability has been negotiated)
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.WriteRawFinalResponse">
+            <summary>
+            SMB_COM_WRITE_RAW Final Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.WriteRawInterimResponse">
+            <summary>
+            SMB_COM_WRITE_RAW Interim Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.WriteRawRequest">
+            <summary>
+            SMB_COM_WRITE_RAW Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.WriteRequest">
+            <summary>
+            SMB_COM_WRITE Request.
+            This command is obsolete.
+            Windows NT4 SP6 will send this command with empty data for some reason.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.WriteResponse">
+            <summary>
+            SMB_COM_WRITE Response.
+            This command is obsolete.
+            Windows NT4 SP6 will send this command with empty data for some reason.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NamedPipeStatus">
+            <summary>
+            SMB_NMPIPE_STATUS
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.ExtendedFileAttributes">
+            <summary>
+            SMB_EXT_FILE_ATTR
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.ExtendedFileAttributes.Normal">
+            <summary>
+            The file has no other attributes set. This attribute is valid only if used alone.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.HeaderFlags2.ExtendedSecurity">
+            <summary>
+            Indicates that the client or server supports extended security
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.LockType.CANCEL_LOCK">
+            <summary>
+            Request to cancel all outstanding lock requests for the specified FID and PID.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.LockType.LARGE_FILES">
+            <summary>
+            Indicates that the LOCKING_ANDX_RANGE format is the 64-bit file offset version.
+            If this flag is not set, then the LOCKING_ANDX_RANGE format is the 32-bit file offset version
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.Capabilities.ExtendedSecurity">
+            <summary>
+            The server supports extended security for authentication
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.SecurityMode.UserSecurityMode">
+            <summary>
+            If clear, the server supports only Share Level access control.
+            If set, the server supports only User Level access control.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.SecurityMode.EncryptPasswords">
+            <summary>
+            If clear, the server supports only plaintext password authentication.
+            If set, the server supports challenge/response authentication.
+            Note: Windows 2000 and above do not support plain-text passwords by default.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.NTCreateFlags.NT_CREATE_REQUEST_OPLOCK">
+            <summary>
+            If set, the client requests an exclusive OpLock.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.NTCreateFlags.NT_CREATE_REQUEST_OPBATCH">
+            <summary>
+            If set, the client requests an exclusive batch OpLock.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.OpenFlags.REQ_ATTRIB">
+            <summary>
+            If this bit is set, the client requests that the file attribute data in the response be populated.
+            All fields after the FID in the response are also populated. If this bit is not set,
+            all fields after the FID in the response are zero.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.OpenFlags.REQ_OPLOCK">
+            <summary>
+            Client requests an exclusive OpLock on the file.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.OpenFlags.REQ_OPLOCK_BATCH">
+            <summary>
+            Client requests a Batch OpLock on the file.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.OpenFlags.SMB_OPEN_EXTENDED_RESPONSE">
+            <summary>
+            SMB 1.0 Addition.
+            If set, the client is requesting the extended format of the response.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.ResourceType.FileTypeCommDevice">
+            <summary>
+            OpenAndX Response: Valid.
+            OpenAndX Extended Response: Invalid (SMB 1.0).
+            NTCreateAndX Response: Valid.
+            NTCreateAndX Extended Response: Invalid (SMB 1.0).
+            Transact2Open2: Was never valid
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.ResourceType.FileTypeUnknown">
+            <summary>
+            OpenAndX Response: Valid
+            NTCreateAndX Response: Invalid
+            Transact2Open2 Response: Valid
+            TransactCreate Response: Valid
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SMBFileAttributes">
+            <summary>
+            SMB_FILE_ATTRIBUTES
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.OptionalSupportFlags.SMB_SUPPORT_SEARCH_BITS">
+            <summary>
+            The server supports the use of SMB_FILE_ATTRIBUTES exclusive search attributes in client requests.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.ServiceName.AnyType">
+            <summary>
+            Valid only for request
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.TreeConnectFlags.DisconnectTID">
+            <summary>
+            If set and SMB_Header.TID is valid, the tree connect specified by the TID in the SMB
+            header of the request SHOULD be disconnected when the server sends the response. If this tree disconnect fails, then the error SHOULD be ignored
+            If set and TID is invalid, the server MUST ignore this bit.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.TreeConnectFlags.ExtendedSignatures">
+            <summary>
+            SMB 1.0 addition.
+            If set, then the client is requesting signing key protection.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.TreeConnectFlags.ExtendedResponse">
+            <summary>
+            SMB 1.0 addition.
+            If set, then the client is requesting extended information in the SMB_COM_TREE_CONNECT_ANDX response.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactSubcommandName">
+            <summary>
+            This is the Function field in SMB_COM_NT_TRANSACT request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactCreateRequest">
+            <summary>
+            NT_TRANSACT_CREATE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactIOCTLRequest">
+            <summary>
+            NT_TRANSACT_IOCTL Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactIOCTLResponse">
+            <summary>
+            NT_TRANSACT_IOCTL Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactNotifyChangeRequest">
+            <summary>
+            NT_TRANSACT_NOTIFY_CHANGE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactNotifyChangeResponse">
+            <summary>
+            NT_TRANSACT_NOTIFY_CHANGE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactQuerySecurityDescriptorRequest">
+            <summary>
+            NT_TRANSACT_QUERY_SECURITY_DESC Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactQuerySecurityDescriptorResponse">
+            <summary>
+            NT_TRANSACT_QUERY_SECURITY_DESC Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactSetSecurityDescriptorRequest">
+            <summary>
+            NT_TRANSACT_SET_SECURITY_DESC Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.NTTransactSetSecurityDescriptorResponse">
+            <summary>
+            NT_TRANSACT_SET_SECURITY_DESC Response
+            </summary>
+        </member>
+        <member name="P:SMBLibrary.SMB1.SMB1Header.ExtendedSecurityFlag">
+            <summary>
+            SMB_FLAGS2_EXTENDED_SECURITY
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.SMB1Helper.ReadSMBDate(System.Byte[],System.Int32)">
+            <summary>
+            SMB_DATE
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.SMB1Helper.ReadSMBTime(System.Byte[],System.Int32)">
+            <summary>
+            SMB_DATE
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.SMB1Message">
+            <summary>
+            Each message has a single header and either a single command or multiple batched (AndX) commands.
+            Multiple command requests or responses can be sent in a single message.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.WriteThroughMode.WriteThrough">
+            <summary>
+            Write-through mode.
+            If this flag is set, then no read ahead or write behind is allowed on this file or device.
+            When the response is returned, data is expected to be on the disk or device.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.Open2Flags.REQ_ATTRIB">
+            <summary>
+            Return additional information in the response;
+            populate the CreationTime, FileDataSize, AccessMode, ResourceType, and NMPipeStatus fields in the response.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.Open2Flags.REQ_OPLOCK">
+            <summary>
+            Exclusive OpLock requested.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.Open2Flags.REQ_OPBATCH">
+            <summary>
+            Batch OpLock requested.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.Open2Flags.REQ_EASIZE">
+            <summary>
+            Return total length of Extended Attributes (EAs);
+            populate the ExtendedAttributeLength field in the response.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2CreateDirectoryRequest">
+            <summary>
+            TRANS2_CREATE_DIRECTORY Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2CreateDirectoryResponse">
+            <summary>
+            TRANS2_CREATE_DIRECTORY Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2FindFirst2Request">
+            <summary>
+            TRANS2_FIND_FIRST2 Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2FindFirst2Response">
+            <summary>
+            TRANS2_FIND_FIRST2 Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2FindNext2Request">
+            <summary>
+            TRANS2_FIND_NEXT2 Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2FindNext2Response">
+            <summary>
+            TRANS2_FIND_NEXT2 Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2GetDfsReferralRequest">
+            <summary>
+            TRANS2_GET_DFS_REFERRAL Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2GetDfsReferralResponse">
+            <summary>
+            TRANS2_GET_DFS_REFERRAL Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2Open2Request">
+            <summary>
+            TRANS2_OPEN2 Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2Open2Response">
+            <summary>
+            TRANS2_OPEN2 Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2QueryFileInformationRequest">
+            <summary>
+            TRANS2_QUERY_FILE_INFORMATION Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2QueryFileInformationResponse">
+            <summary>
+            TRANS2_QUERY_FILE_INFORMATION Response
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2QueryFileInformationResponse.GetFileInformation(SMBLibrary.FileInformationClass)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2QueryFileInformationResponse.SetFileInformation(SMBLibrary.FileInformation)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2QueryFSInformationRequest">
+            <summary>
+            TRANS2_QUERY_FS_INFORMATION Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2QueryFSInformationResponse">
+            <summary>
+            TRANS2_QUERY_FS_INFORMATION Response
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2QueryFSInformationResponse.GetFileSystemInformation(SMBLibrary.FileSystemInformationClass)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2QueryFSInformationResponse.SetFileSystemInformation(SMBLibrary.FileSystemInformation)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2QueryPathInformationRequest">
+            <summary>
+            TRANS2_QUERY_PATH_INFORMATION Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2QueryPathInformationResponse">
+            <summary>
+            TRANS2_QUERY_PATH_INFORMATION Response
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2QueryPathInformationResponse.GetFileInformation(SMBLibrary.FileInformationClass)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2QueryPathInformationResponse.SetFileInformation(SMBLibrary.FileInformation)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2SetFileInformationRequest">
+            <summary>
+            TRANS2_SET_FILE_INFORMATION Request
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2SetFileInformationRequest.SetInformation(SMBLibrary.FileInformation)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2SetFileInformationResponse">
+            <summary>
+            TRANS2_SET_FILE_INFORMATION Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2SetFSInformationRequest">
+            <summary>
+            TRANS2_SET_FS_INFORMATION Request
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2SetFSInformationRequest.SetFileSystemInformation(SMBLibrary.FileSystemInformation)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2SetFSInformationResponse">
+            <summary>
+            TRANS2_SET_FS_INFORMATION Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2SetPathInformationRequest">
+            <summary>
+            TRANS2_SET_PATH_INFORMATION Request
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB1.Transaction2SetPathInformationRequest.SetInformation(SMBLibrary.FileInformation)">
+            <remarks>
+            Support for pass-through Information Levels must be enabled.
+            </remarks>
+        </member>
+        <member name="T:SMBLibrary.SMB1.Transaction2SetPathInformationResponse">
+            <summary>
+            TRANS2_SET_PATH_INFORMATION Response
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.PipeState.ReadMode">
+            <summary>
+            If set, the named pipe is operating in message mode.
+            If not set, the named pipe is operating in byte mode.
+            In message mode, the system treats the bytes read or written in each I/O operation to the pipe as a message unit.
+            The system MUST perform write operations on message-type pipes as if write-through mode were enabled.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.PipeState.Nonblocking">
+            <summary>
+            If set, a read or a raw read request returns all data available to be read from the named pipe, up to the maximum read size set in the request.
+            A write request returns after writing data to the named pipe without waiting for the data to be consumed.
+            Named pipe non-blocking raw writes are not allowed. Raw writes MUST be performed in blocking mode.
+            If not set, a read or a raw read request will wait (block) until sufficient data to satisfy the read request becomes available,
+            or until the request is canceled. A write request blocks until its data is consumed, if the write request length is greater than zero.
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB1.TransactionSubcommandName.TRANS_MAILSLOT_WRITE">
+            <summary>
+            The 0x0001 subcommand code is interpreted as TRANS_MAILSLOT_WRITE if the operation is being performed on a mailslot.
+            The same code is interpreted as a TRANS_SET_NMPIPE_STATE (section 2.2.5.1) if the operation is performed on a named pipe.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionCallNamedPipeRequest">
+            <summary>
+            TRANS_CALL_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionCallNamedPipeResponse">
+            <summary>
+            TRANS_CALL_NMPIPE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionPeekNamedPipeRequest">
+            <summary>
+            TRANS_PEEK_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionPeekNamedPipeResponse">
+            <summary>
+            TRANS_PEEK_NMPIPE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionQueryNamedPipeInfoRequest">
+            <summary>
+            TRANS_QUERY_NMPIPE_INFO Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionQueryNamedPipeInfoResponse">
+            <summary>
+            TRANS_QUERY_NMPIPE_INFO Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionQueryNamedPipeStateRequest">
+            <summary>
+            TRANS_QUERY_NMPIPE_STATE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionQueryNamedPipeStateResponse">
+            <summary>
+            TRANS_QUERY_NMPIPE_STATE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionRawReadNamedPipeRequest">
+            <summary>
+            TRANS_RAW_READ_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionRawReadNamedPipeResponse">
+            <summary>
+            TRANS_RAW_READ_NMPIPE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionRawWriteNamedPipeRequest">
+            <summary>
+            TRANS_RAW_WRITE_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionRawWriteNamedPipeResponse">
+            <summary>
+            TRANS_RAW_WRITE_NMPIPE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionReadNamedPipeRequest">
+            <summary>
+            TRANS_READ_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionReadNamedPipeResponse">
+            <summary>
+            TRANS_READ_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionSetNamedPipeStateRequest">
+            <summary>
+            TRANS_SET_NMPIPE_STATE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionSetNamedPipeStateResponse">
+            <summary>
+            TRANS_SET_NMPIPE_STATE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionTransactNamedPipeRequest">
+            <summary>
+            TRANS_TRANSACT_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionTransactNamedPipeResponse">
+            <summary>
+            TRANS_TRANSACT_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionWaitNamedPipeRequest">
+            <summary>
+            TRANS_WAIT_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionWriteNamedPipeRequest">
+            <summary>
+            TRANS_WRITE_NMPIPE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.TransactionWriteNamedPipeResponse">
+            <summary>
+            TRANS_WRITE_NMPIPE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB1.UTimeHelper">
+            <summary>
+            UTime - The number of seconds since Jan 1, 1970, 00:00:00
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.CancelRequest">
+            <summary>
+            SMB2 CANCEL Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.ChangeNotifyRequest">
+            <summary>
+            SMB2 CHANGE_NOTIFY Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.ChangeNotifyResponse">
+            <summary>
+            SMB2 CHANGE_NOTIFY Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.CloseRequest">
+            <summary>
+            SMB2 CLOSE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.CloseResponse">
+            <summary>
+            SMB2 CLOSE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.CreateRequest">
+            <summary>
+            SMB2 CREATE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.CreateResponse">
+            <summary>
+            SMB2 CREATE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.EchoRequest">
+            <summary>
+            SMB2 ECHO Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.EchoResponse">
+            <summary>
+            SMB2 ECHO Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.ErrorResponse">
+            <summary>
+            SMB2 ERROR Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.FlushRequest">
+            <summary>
+            SMB2 FLUSH Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.FlushResponse">
+            <summary>
+            SMB2 FLUSH Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.IOCtlRequest">
+            <summary>
+            SMB2 IOCTL Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.IOCtlResponse">
+            <summary>
+            SMB2 IOCTL Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.LockRequest">
+            <summary>
+            SMB2 LOCK Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.LockResponse">
+            <summary>
+            SMB2 LOCK Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.LogoffRequest">
+            <summary>
+            SMB2 LOGOFF Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.LogoffResponse">
+            <summary>
+            SMB2 LOGOFF Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.NegotiateRequest">
+            <summary>
+            SMB2 NEGOTIATE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.NegotiateResponse">
+            <summary>
+            SMB2 NEGOTIATE Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.QueryDirectoryRequest">
+            <summary>
+            SMB2 QUERY_DIRECTORY Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.QueryDirectoryResponse">
+            <summary>
+            SMB2 QUERY_DIRECTORY Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.QueryInfoRequest">
+            <summary>
+            SMB2 QUERY_INFO Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.QueryInfoResponse">
+            <summary>
+            SMB2 QUERY_INFO Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.ReadRequest">
+            <summary>
+            SMB2 READ Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.ReadResponse">
+            <summary>
+            SMB2 READ Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.SessionSetupRequest">
+            <summary>
+            SMB2 SESSION_SETUP Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.SessionSetupResponse">
+            <summary>
+            SMB2 SESSION_SETUP Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.SetInfoRequest">
+            <summary>
+            SMB2 SET_INFO Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.SetInfoResponse">
+            <summary>
+            SMB2 SET_INFO Response
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB2.SMB2Command.GetCommandChainBytes(System.Collections.Generic.List{SMBLibrary.SMB2.SMB2Command},System.Byte[],SMBLibrary.SMB2.SMB2Dialect)">
+            <param name="signingKey">
+            Message will be signed using this key if (not null and) SMB2_FLAGS_SIGNED is set.
+            </param>
+            <param name="dialect">
+            Used for signature calculation when applicable.
+            </param>
+        </member>
+        <member name="T:SMBLibrary.SMB2.TreeConnectRequest">
+            <summary>
+            SMB2 TREE_CONNECT Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.TreeConnectResponse">
+            <summary>
+            SMB2 TREE_CONNECT Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.TreeDisconnectRequest">
+            <summary>
+            SMB2 TREE_DISCONNECT Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.TreeDisconnectResponse">
+            <summary>
+            SMB2 TREE_DISCONNECT Response
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.WriteRequest">
+            <summary>
+            SMB2 WRITE Request
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.WriteResponse">
+            <summary>
+            SMB2 WRITE Response
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB2.SMB2Dialect.SMB2xx">
+            <summary>
+            indicates that the server implements SMB 2.1 or future dialect revisions and expects
+            the client to send a subsequent SMB2 Negotiate request to negotiate the actual SMB 2
+            Protocol revision to be used.
+            The wildcard revision number is sent only in response to a multi-protocol negotiate
+            request with the "SMB 2.???" dialect string.
+            </summary>
+        </member>
+        <member name="M:SMBLibrary.SMB2.SMB2Cryptography.TransformMessage(System.Byte[],System.Byte[],System.UInt64)">
+            <summary>
+            Encyrpt message and prefix with SMB2 TransformHeader
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.SMB2TransformHeader">
+            <summary>
+            Used by the client or server when sending encrypted messages. only valid for the SMB 3.x dialect family.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.CreateContext">
+            <summary>
+            [MS-SMB2] 2.2.13.2 - SMB2_CREATE_CONTEXT
+            </summary>
+        </member>
+        <member name="F:SMBLibrary.SMB2.CreateContext.Next">
+            <summary>
+            The offset from the beginning of this Create Context to the beginning of a subsequent 8-byte aligned Create Context.
+            This field MUST be set to 0 if there are no subsequent contexts.
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.FileID">
+            <summary>
+            [MS-SMB2] 2.2.14.1 - SMB2_FILEID
+            </summary>
+        </member>
+        <member name="T:SMBLibrary.SMB2.NegotiateContext">
+            <summary>
+            [MS-SMB2] 2.2.3.1 - NEGOTIATE_CONTEXT
+            </summary>
+        </member>
+        <member name="T:System.Security.Cryptography.MD4">
+            <summary>
+              Implements the MD4 message digest algorithm in C#
+            </summary>
+            <remarks>
+              <p>
+                <b>References:</b>
+                <ol>
+                  <li> Ronald L. Rivest,
+                    "<a href = "http://www.roxen.com/rfc/rfc1320.html">
+                       The MD4 Message-Digest Algorithm</a>",
+                    IETF RFC-1320 (informational).
+                  </li>
+                </ol>         
+              </p>
+            </remarks>
+        </member>
+        <member name="F:System.Security.Cryptography.MD4.BLOCK_LENGTH">
+            <summary>
+              The size in bytes of the input block to the transformation algorithm
+            </summary>
+        </member>
+        <member name="F:System.Security.Cryptography.MD4.X">
+            <summary>
+              512-bit work buffer = 16 x 32-bit words
+            </summary>
+        </member>
+        <member name="F:System.Security.Cryptography.MD4.context">
+            <summary>
+              4 32-bit words (interim result)
+            </summary>
+        </member>
+        <member name="F:System.Security.Cryptography.MD4.buffer">
+            <summary>
+              512-bit input buffer = 16 x 32-bit words holds until it reaches 512 bits
+            </summary>
+        </member>
+        <member name="F:System.Security.Cryptography.MD4.count">
+            <summary>
+              Number of bytes procesed so far mod. 2 power of 64.
+            </summary>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.#ctor(System.Security.Cryptography.MD4)">
+            <summary>
+              This constructor is here to implement the clonability of this class
+            </summary>
+            <param name = "md"> </param>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.EngineReset">
+            <summary>
+              Resets this object disregarding any temporary data present at the
+              time of the invocation of this call.
+            </summary>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.EngineUpdate(System.Byte)">
+            <summary>
+              Continues an MD4 message digest using the input byte
+            </summary>
+            <param name = "b">byte to input</param>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.EngineUpdate(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+              MD4 block update operation
+            </summary>
+            <remarks>
+              Continues an MD4 message digest operation by filling the buffer, 
+              transform(ing) data in 512-bit message block(s), updating the variables
+              context and count, and leaving (buffering) the remaining bytes in buffer
+              for the next update or finish.
+            </remarks>
+            <param name = "input">input block</param>
+            <param name = "offset">start of meaningful bytes in input</param>
+            <param name = "len">count of bytes in input blcok to consider</param>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.EngineDigest">
+            <summary>
+              Completes the hash computation by performing final operations such
+              as padding.  At the return of this engineDigest, the MD engine is
+              reset.
+            </summary>
+            <returns>the array of bytes for the resulting hash value.</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.GetByteHashFromString(System.String)">
+            <summary>
+              Returns a byte hash from a string
+            </summary>
+            <param name = "s">string to hash</param>
+            <returns>byte-array that contains the hash</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.GetByteHashFromBytes(System.Byte[])">
+            <summary>
+              Returns a binary hash from an input byte array
+            </summary>
+            <param name = "b">byte-array to hash</param>
+            <returns>binary hash of input</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.GetHexHashFromBytes(System.Byte[])">
+            <summary>
+              Returns a string that contains the hexadecimal hash
+            </summary>
+            <param name = "b">byte-array to input</param>
+            <returns>String that contains the hex of the hash</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.GetByteHashFromByte(System.Byte)">
+            <summary>
+              Returns a byte hash from the input byte
+            </summary>
+            <param name = "b">byte to hash</param>
+            <returns>binary hash of the input byte</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.GetHexHashFromByte(System.Byte)">
+            <summary>
+              Returns a string that contains the hexadecimal hash
+            </summary>
+            <param name = "b">byte to hash</param>
+            <returns>String that contains the hex of the hash</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.GetHexHashFromString(System.String)">
+            <summary>
+              Returns a string that contains the hexadecimal hash
+            </summary>
+            <param name = "s">string to hash</param>
+            <returns>String that contains the hex of the hash</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.MD4.Transform(System.Byte[]@,System.Int32)">
+            <summary>
+              MD4 basic transformation
+            </summary>
+            <remarks>
+              Transforms context based on 512 bits from input block starting
+              from the offset'th byte.
+            </remarks>
+            <param name = "block">input sub-array</param>
+            <param name = "offset">starting position of sub-array</param>
+        </member>
+        <member name="M:Utilities.SocketUtils.SetKeepAlive(System.Net.Sockets.Socket,System.Boolean,System.TimeSpan,System.TimeSpan)">
+            <param name="timeout">the timeout, in milliseconds, with no activity until the first keep-alive packet is sent</param>
+            <param name="interval">the interval, in milliseconds, between when successive keep-alive packets are sent if no acknowledgement is received</param>
+        </member>
+        <member name="M:Utilities.SocketUtils.ReleaseSocket(System.Net.Sockets.Socket)">
+            <summary>
+            Socket will be forcefully closed and all pending data will be ignored.
+            </summary>
+        </member>
+    </members>
+</doc>
