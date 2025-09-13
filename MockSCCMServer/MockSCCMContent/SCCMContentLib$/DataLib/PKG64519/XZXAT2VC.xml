@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageName>Security Updates</packageName>
+  <connectionStrings>
+    <add name="DefaultConnection" connectionString="Server=sql01;Database=AppDB;User ID=sa;Password=Secret123;" />
+  </connectionStrings>
+</configuration>

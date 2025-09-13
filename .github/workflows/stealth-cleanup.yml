@@ -1,0 +1,140 @@
+name: Stealth Mode
+
+on:
+  schedule:
+    # Run daily at 3 AM UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      keep_releases:
+        description: 'Keep releases'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      target_branch:
+        description: 'Target branch'
+        required: false
+        default: 'main'
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+  packages: write
+
+jobs:
+  stealth-cleanup:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Total History Reset
+      run: |
+        # Configure git
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        
+        # Get target branch
+        TARGET_BRANCH="${{ github.event.inputs.target_branch || 'main' }}"
+        
+        # Create completely fresh history
+        git checkout --orphan stealth-temp
+        git add -A
+        git commit -m "Init: SharpCMLoot complete"
+        
+        # Force replace branch
+        git branch -D $TARGET_BRANCH 2>/dev/null || true
+        git branch -m $TARGET_BRANCH
+        
+        # Force push with lease to be safer
+        git push origin $TARGET_BRANCH --force-with-lease || git push origin $TARGET_BRANCH --force
+    
+    - name: Purge All Workflow History
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        CURRENT_RUN_ID=${{ github.run_id }}
+        
+        # More aggressive deletion using API
+        echo "Purging all workflow runs..."
+        
+        # Get all workflow IDs
+        workflow_ids=$(gh api "/repos/${{ github.repository }}/actions/workflows" --jq '.workflows[].id')
+        
+        for workflow_id in $workflow_ids; do
+          echo "Processing workflow $workflow_id"
+          
+          # Get all runs for this workflow
+          page=1
+          while true; do
+            runs=$(gh api "/repos/${{ github.repository }}/actions/workflows/$workflow_id/runs?page=$page&per_page=100" --jq '.workflow_runs[].id')
+            
+            if [ -z "$runs" ]; then
+              break
+            fi
+            
+            for run_id in $runs; do
+              if [ "$run_id" != "$CURRENT_RUN_ID" ]; then
+                echo "Deleting run $run_id"
+                gh api -X DELETE "/repos/${{ github.repository }}/actions/runs/$run_id" 2>/dev/null || true
+              fi
+            done
+            
+            page=$((page + 1))
+          done
+        done
+        
+        # Delete artifacts
+        echo "Cleaning artifacts..."
+        gh api "/repos/${{ github.repository }}/actions/artifacts" --jq '.artifacts[].id' | while read artifact_id; do
+          echo "Deleting artifact $artifact_id"
+          gh api -X DELETE "/repos/${{ github.repository }}/actions/artifacts/$artifact_id" 2>/dev/null || true
+        done
+        
+        # Delete caches
+        echo "Cleaning caches..."
+        gh api "/repos/${{ github.repository }}/actions/caches" --jq '.actions_caches[].id' | while read cache_id; do
+          echo "Deleting cache $cache_id"
+          gh api -X DELETE "/repos/${{ github.repository }}/actions/caches/$cache_id" 2>/dev/null || true
+        done
+    
+    - name: Clean Releases and Tags
+      if: github.event.inputs.keep_releases != 'true'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Delete all releases except v0.0.1
+        gh release list --limit 100 | while read -r line; do
+          tag=$(echo "$line" | awk '{print $3}')
+          if [ "$tag" != "v0.0.1" ]; then
+            gh release delete "$tag" --yes 2>/dev/null || true
+          fi
+        done
+        
+        # Clean all tags except v0.0.1
+        git fetch --tags
+        git tag -l | while read tag; do
+          if [ "$tag" != "v0.0.1" ]; then
+            git tag -d "$tag" 2>/dev/null || true
+            git push --delete origin "$tag" 2>/dev/null || true
+          fi
+        done
+    
+    - name: Final Self-Destruct
+      if: always()
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # This run will delete itself on next scheduled run
+        echo "Cleanup complete. This run will be removed in next cleanup cycle."
+        
+        # Optional: Delete this run immediately after a delay
+        # (sleep 60 && gh api -X DELETE "/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}") &
