@@ -1,0 +1,3 @@
+@echo off
+REM Windows 10 Deployment Installation Script
+echo Installing Windows 10 Deployment...
