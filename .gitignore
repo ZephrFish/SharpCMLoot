@@ -74,3 +74,4 @@ out.txt
 !*.csproj
 !*.sln
 !packages.config
+claudedocs/analysis_report.md
